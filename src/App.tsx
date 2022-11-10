@@ -1,26 +1,47 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { useEffect, useState } from 'react';
+import Movie from './components/Movie';
+import Filter from './components/Filter';
 
-function App() {
+import { motion, AnimatePresence } from './framer-motion';
+
+import { IMovieTypes } from './types';
+
+const App: React.FC = () => {
+  useEffect(() => {
+    fetchPopular();
+  }, []);
+
+  const [popular, setPopular] = useState<IMovieTypes[]>([]);
+  const [filtered, setFiltered] = useState<IMovieTypes[]>([]);
+  const [activeGenre, setActiveGenre] = useState<number>(0);
+
+  const fetchPopular = async () => {
+    const res = await fetch(
+      `https://api.themoviedb.org/3/movie/popular?api_key=fb840aac98a19f87e57f13c2e3ce3f7d&language=en-US&page=1`,
+    );
+    const movies = await res.json();
+    setPopular(movies.results);
+    setFiltered(movies.results);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="max-w-7xl lg:m-auto lg:p-8 m-8 space-y-8">
+      <h1 className="text-7xl font-bold mb-8 font-DMSans">Now is trending.</h1>
+      <Filter
+        popular={popular}
+        setFiltered={setFiltered}
+        activeGenre={activeGenre}
+        setActiveGenre={setActiveGenre}
+      />
+      <motion.div layout className="grid md:grid-cols-3 lg:grid-cols-5 gap-x-4 gap-y-8">
+        <AnimatePresence>
+          {filtered?.map((movie: IMovieTypes) => {
+            return <Movie key={movie.id} movie={movie} />;
+          })}
+        </AnimatePresence>
+      </motion.div>
     </div>
   );
-}
+};
 
 export default App;
