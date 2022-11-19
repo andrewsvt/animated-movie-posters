@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import Movie from './components/Movie';
 import Filter from './components/Filter';
+import Skeleton from './components/Skeleton';
 
 import { motion, AnimatePresence } from './framer-motion';
 
@@ -8,9 +9,16 @@ import { IMovieTypes } from './types';
 
 const App: React.FC = () => {
   useEffect(() => {
-    fetchPopular();
+    setLoading(true);
+    const timer = setTimeout(() => {
+      fetchPopular();
+      setLoading(false);
+    }, 1500);
+
+    return () => clearTimeout(timer);
   }, []);
 
+  const [loading, setLoading] = useState<boolean>(true);
   const [popular, setPopular] = useState<IMovieTypes[]>([]);
   const [filtered, setFiltered] = useState<IMovieTypes[]>([]);
   const [activeGenre, setActiveGenre] = useState<number>(0);
@@ -22,6 +30,7 @@ const App: React.FC = () => {
     const movies = await res.json();
     setPopular(movies.results);
     setFiltered(movies.results);
+    setLoading(false);
   };
 
   return (
@@ -35,9 +44,13 @@ const App: React.FC = () => {
       />
       <motion.div layout className="grid md:grid-cols-3 lg:grid-cols-5 gap-x-4 gap-y-8">
         <AnimatePresence>
-          {filtered?.map((movie: IMovieTypes) => {
-            return <Movie key={movie.id} movie={movie} />;
-          })}
+          {!loading
+            ? filtered?.map((movie: IMovieTypes) => {
+                return <Movie key={movie.id} movie={movie} />;
+              })
+            : [...Array(10)].map((movie: number, index: number) => {
+                return <Skeleton key={index} />;
+              })}
         </AnimatePresence>
       </motion.div>
     </div>
