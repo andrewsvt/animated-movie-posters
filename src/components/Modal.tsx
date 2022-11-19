@@ -37,6 +37,10 @@ const Modal: React.FC<ModalProps> = ({ modal, setModal, movie }) => {
             <motion.img
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
+              transition={{
+                duration: 0.4,
+                delay: 0.4,
+              }}
               className="h-full object-cover rounded-3xl"
               src={'https://image.tmdb.org/t/p/original' + movie.backdrop_path}
               alt=""></motion.img>
