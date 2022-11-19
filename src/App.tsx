@@ -24,8 +24,9 @@ const App: React.FC = () => {
   const [activeGenre, setActiveGenre] = useState<number>(0);
 
   const fetchPopular = async () => {
+    const api_key: string = process.env.REACT_APP_API_KEY || '';
     const res = await fetch(
-      `https://api.themoviedb.org/3/movie/popular?api_key=fb840aac98a19f87e57f13c2e3ce3f7d&language=en-US&page=1`,
+      `https://api.themoviedb.org/3/movie/popular?api_key=${api_key}&language=en-US&page=1`,
     );
     const movies = await res.json();
     setPopular(movies.results);
