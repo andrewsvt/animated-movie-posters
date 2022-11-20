@@ -12,6 +12,12 @@ interface MovieProps {
 const Movie: React.FC<MovieProps> = ({ movie }) => {
   const [modal, setModal] = useState<boolean>(false);
 
+  if (modal) {
+    document.body.classList.add('active-modal');
+  } else {
+    document.body.classList.remove('active-modal');
+  }
+
   const toggleModal = () => {
     setModal(!modal);
   };
