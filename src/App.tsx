@@ -36,7 +36,7 @@ const App: React.FC = () => {
 
   return (
     <div className="max-w-7xl lg:m-auto lg:p-8 m-8 space-y-8">
-      <h1 className="text-7xl font-bold mb-8 font-DMSans">Now is trending.</h1>
+      <h1 className="text-7xl font-bold mb-8 font-DMSans">Trending now</h1>
       <Filter
         popular={popular}
         setFiltered={setFiltered}
